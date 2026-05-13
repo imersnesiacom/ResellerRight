@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="siteTitle">Reseller Right | Asset OS</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts: Montserrat, Poppins, Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome v6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                            orange: '#fb923c',
+                            blue: '#38bdf8',
+                            dark: '#070812',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        title: ['Montserrat', 'sans-serif'],
+                        body: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style id="dynamicStyles">
+        :root {
+            --brand-primary: #a855f7;
+            --brand-secondary: #070812;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: 
+                radial-gradient(circle at 12% 8%, rgba(236, 72, 153, 0.15), transparent 28%),
+                radial-gradient(circle at 88% 12%, rgba(249, 115, 22, 0.12), transparent 30%),
+                radial-gradient(circle at 50% 100%, rgba(37, 99, 235, 0.15), transparent 32%),
+                #070812;
+            color: white;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.3s ease;
+        }
+
+        /* Light Mode Override */
+        html.light body {
+            background: #fdfdfd;
+            color: #0f172a;
+        }
+
+        /* Header Specific: Light Mode uses Dark Background as requested */
+        html.light header {
+            background: #070812 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Anti-Italic Global Fix */
+        * { font-style: normal !important; }
+
+        /* Smooth Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        html.light .glass {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            backdrop-filter: blur(12px);
+        }
+
+        /* 4-Color Gradient Text */
+        .highlight-text {
+            background: linear-gradient(90deg, #fb923c, #ec4899, #a855f7, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            display: inline-block;
+            text-shadow: 0 0 30px rgba(236, 72, 153, 0.1);
+        }
+
+        /* Sidebar Styling */
+        .sidebar { 
+            width: 280px; 
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(168, 85, 247, 0.08);
+            z-index: 50; 
+            flex-shrink: 0; 
+        }
+
+        html.light .sidebar {
+            background: #ffffff;
+            border-right: 1px solid #f1f5f9;
+        }
+        
+        .sidebar-link {
+            display: flex; 
+            align-items: center; 
+            padding: 12px 16px; 
+            margin: 4px 12px;
+            border-radius: 12px; 
+            font-size: 0.875rem; 
+            font-weight: 600; 
+            color: rgba(255,255,255,0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        html.light .sidebar-link { color: #64748b; }
+        
+        .sidebar-link:hover { 
+            background-color: rgba(255, 255, 255, 0.05); 
+            color: white; 
+        }
+
+        html.light .sidebar-link:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        
+        .sidebar-link.active { 
+            background: linear-gradient(to right, rgba(168, 85, 247, 0.1), transparent);
+            border-left: 3px solid var(--brand-primary);
+            color: var(--brand-primary); 
+        }
+
+        .alphabet-label {
+            font-size: 10px; 
+            font-weight: 800; 
+            color: rgba(255,255,255,0.15);
+            padding: 24px 28px 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.2em;
+        }
+
+        html.light .alphabet-label { color: #cbd5e1; }
+
+        .content-area { 
+            flex: 1; 
+            height: 100vh; 
+            overflow-y: auto; 
+            scroll-behavior: smooth;
+        }
+
+        /* Card Styling & Hover Shadow Fix - No More White Borders */
+        .saas-card {
+            display: flex; flex-direction: column; height: 100%;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(168, 85, 247, 0.12); /* Branded border color */
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer;
+        }
+
+        html.light .saas-card {
+            background: white;
+            border-color: rgba(168, 85, 247, 0.15);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+        
+        .saas-card:hover { 
+            border-color: var(--brand-primary);
+            /* Colorful Brand Gradient Shadow */
+            box-shadow: 0 20px 45px -10px rgba(168, 85, 247, 0.4); 
+            transform: translateY(-4px); 
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        html.light .saas-card:hover {
+            background: #fff;
+            box-shadow: 0 20px 40px -8px rgba(168, 85, 247, 0.3);
+        }
+
+        .asset-card { 
+            display: flex; flex-direction: column; height: 100%;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 24px; 
+            padding: 24px; 
+            transition: all 0.3s ease;
+        }
+
+        html.light .asset-card {
+            background: white;
+            border-color: rgba(168, 85, 247, 0.12);
+        }
+
+        .asset-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            /* Colorful Gradient Shadow */
+            box-shadow: 0 15px 35px -5px rgba(236, 72, 153, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-black {
+            background: linear-gradient(135deg, #fb923c, #ec4899, #a855f7) !important; 
+            color: white !important; 
+            padding: 12px 20px;
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-black:hover { 
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px -5px rgba(236, 72, 153, 0.4);
+        }
+
+        .saas-input {
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 12px;
+            padding: 12px 16px; 
+            color: white;
+            outline: none; 
+            transition: all 0.2s;
+        }
+
+        html.light .saas-input {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            color: #0f172a;
+        }
+
+        /* Input inside the Dark Header in Light Mode must stay look readable */
+        html.light header .saas-input {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .saas-input:focus { border-color: var(--brand-primary); background: rgba(255, 255, 255, 0.04); }
+
+        .sub-cat-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.15); 
+            padding: 8px 16px; border-radius: 10px; font-size: 10px; font-weight: 800; 
+            color: var(--brand-primary); text-transform: uppercase; letter-spacing: 0.1em;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeIn 0.5s ease-out forwards; }
+
+        #loading-overlay {
+            position: fixed; inset: 0; background: #070812; z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* Scrollable content areas */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.2); border-radius: 10px; }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden font-sans transition-colors duration-500">
+
+    <!-- Loading Screen -->
+    <div id="loading-overlay">
+        <div class="flex flex-col items-center gap-6">
+            <div class="w-12 h-12 border-4 border-white/5 border-t-brand-purple rounded-full animate-spin"></div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Mensinkronkan Workspace...</p>
+        </div>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar hidden md:flex flex-col h-full">
+        <!-- Logo Brand & Nama Interaktif -->
+        <div class="p-8 flex items-center gap-4 cursor-pointer group" id="logoBtn">
+            <div id="brandLogoContainer" class="w-10 h-10 bg-brand-purple rounded-xl flex items-center justify-center shadow-2xl group-active:scale-90 transition-all overflow-hidden border border-white/10">
+                <!-- SVG Icon diisi dinamis -->
+            </div>
+            <div>
+                <h1 class="text-sm font-black tracking-tight text-white dark:text-white light:text-slate-900 font-title leading-tight" id="brandNameDisplay">Loading...</h1>
+                <p class="text-[8px] font-bold text-brand-orange uppercase tracking-[0.2em] -mt-0.5">Asset OS</p>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar py-2">
+            <div class="px-8 mb-4">
+                <p class="text-[10px] font-black text-white/20 dark:text-white/20 light:text-slate-300 uppercase tracking-[0.2em]">Main Menu</p>
+            </div>
+            
+            <div onclick="showHome()" class="sidebar-link active" id="navHome">
+                <span id="overviewIconContainer" class="mr-3 w-4 flex justify-center text-sm opacity-50"></span>
+                <span id="overviewTextDisplay" class="font-title text-xs tracking-wider">Overview</span>
+            </div>
+
+            <div id="sidebarProductList"></div>
+
+            <!-- Stealth Console Menu (Hanya Admin) -->
+            <div id="adminMenu" class="hidden mt-8 border-t border-white/5 pt-6 pb-6 animate-in">
+                <div class="px-8 mb-4">
+                    <p class="text-[10px] font-black text-red-500/50 uppercase tracking-[0.2em]">Console</p>
+                </div>
+                <div onclick="checkAdmin('asset')" class="sidebar-link" id="navAsset">
+                    <i class="fa-solid fa-file-pen mr-3 w-4 text-emerald-500 text-xs"></i> Assets
+                </div>
+                <div onclick="checkAdmin('product')" class="sidebar-link" id="navProduct">
+                    <i class="fa-solid fa-layer-group mr-3 w-4 text-pink-500 text-xs"></i> Silos
+                </div>
+                <div onclick="logoutAdmin()" class="sidebar-link text-white/20 hover:text-red-400 mt-4">
+                    <i class="fa-solid fa-power-off mr-3 w-4 text-xs"></i> Lock
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 border-t border-white/5">
+            <div id="footerDisplay" class="text-[9px] font-bold text-white/20 light:text-slate-400 leading-relaxed uppercase tracking-widest"></div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="content-area flex flex-col">
+        
+        <!-- Header -->
+        <header class="bg-brand-dark/40 backdrop-blur-xl border-b border-white/5 px-10 py-6 flex justify-between items-center sticky top-0 z-40">
+            <div class="flex items-center gap-6">
+                <!-- Header Titles: Always White because Header is Black in both modes -->
+                <h2 class="text-base font-black text-white font-title cursor-pointer uppercase tracking-tighter" id="headerTitle" onclick="showHome()">Library</h2>
+                
+                <div id="breadcrumb" class="hidden flex items-center gap-3">
+                    <i class="fa-solid fa-chevron-right text-[8px] text-white/20"></i>
+                    <span id="breadcrumbProduct" class="text-[10px] text-white/40 font-bold px-3 py-1.5 glass rounded-lg cursor-pointer hover:bg-white/5 transition-colors uppercase tracking-widest">Product</span>
+                    
+                    <div id="breadcrumbCategoryContainer" class="hidden flex items-center gap-3">
+                        <i class="fa-solid fa-chevron-right text-[8px] text-white/20"></i>
+                        <span id="breadcrumbCategory" class="text-[10px] text-brand-purple font-black px-3 py-1.5 glass border-brand-purple/20 rounded-lg uppercase tracking-widest bg-brand-purple/5">Category</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-6">
+                <!-- DARK/LIGHT MODE TOGGLE -->
+                <button id="theme-toggle" class="w-10 h-10 glass rounded-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all text-brand-orange">
+                    <i class="fa-solid fa-sun dark:hidden"></i>
+                    <i class="fa-solid fa-moon hidden dark:block"></i>
+                </button>
+
+                <!-- Search Area -->
+                <div class="relative w-64 lg:w-72 group">
+                    <input type="text" id="globalSearch" placeholder="Cari aset..." class="saas-input w-full pl-10 text-[11px] font-bold tracking-wider py-2.5">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-white/20 text-xs group-focus-within:text-brand-purple transition-colors"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Area Rendering Konten Dinamis -->
+        <div id="viewArea" class="p-10 animate-in">
+            <!-- Diisi via JS -->
+        </div>
+
+    </main>
+
+    <!-- MOBILE NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 h-20 glass border-t border-white/10 md:hidden flex justify-around items-center z-[100] px-6">
+        <div onclick="showHome()" class="flex flex-col items-center gap-1.5 text-[9px] font-black text-white/30 uppercase tracking-widest">
+            <i class="fa-solid fa-house text-lg text-brand-purple"></i>
+            <span>Home</span>
+        </div>
+        <div onclick="showHome()" class="flex flex-col items-center gap-1.5 text-[9px] font-black text-white/30 uppercase tracking-widest">
+            <i class="fa-solid fa-boxes-stacked text-lg text-brand-pink"></i>
+            <span>Vault</span>
+        </div>      
+    </nav>
+
+    <!-- ADMIN AUTH MODAL -->
+    <div id="adminAuth" class="hidden fixed inset-0 z-[200] bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
+        <div class="glass p-12 w-full max-w-sm rounded-[40px] shadow-2xl border-white/10">
+            <div class="w-16 h-16 bg-brand-purple/20 rounded-3xl mx-auto mb-8 flex items-center justify-center border border-brand-purple/30">
+                <i class="fa-solid fa-shield-halved text-brand-purple text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-black mb-2 text-center text-white dark:text-white light:text-slate-900 font-title uppercase tracking-tighter">Verify Access</h3>
+            <p class="text-[10px] font-bold text-white/30 mb-10 text-center uppercase tracking-widest leading-relaxed">Masukkan Master Key lo untuk <br>membuka pintu editor.</p>
+            <input type="password" id="adminPass" placeholder="••••••••" class="saas-input w-full text-center tracking-[1.5em] mb-10 font-black text-xl py-4">
+            <div class="flex gap-4">
+                <button onclick="closeAuth()" class="flex-1 py-4 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] hover:text-white transition">Batal</button>
+                <button onclick="loginAdmin()" class="flex-1 btn-black shadow-2xl font-black uppercase tracking-widest">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-24 md:bottom-12 right-10 z-[300] opacity-0 pointer-events-none transition-all duration-500">
+        <div class="glass bg-brand-purple/20 text-white px-8 py-4 rounded-2xl flex items-center gap-4 shadow-2xl border-brand-purple/30">
+            <i class="fa-solid fa-circle-check text-brand-purple text-lg"></i>
+            <span id="toastMsg" class="text-xs font-black uppercase tracking-widest">Berhasil!</span>
+        </div>
+    </div>
+
+    <!-- HTML PREVIEW MODAL -->
+    <div id="htmlPreview" class="hidden fixed inset-0 bg-brand-dark/90 backdrop-blur-xl flex items-center justify-center p-12 z-[150]">
+        <div class="glass w-full max-w-6xl h-full rounded-[40px] overflow-hidden flex flex-col shadow-2xl border-white/10">
+            <div class="flex justify-between items-center p-8 border-b border-white/5">
+                <h4 class="font-black text-[10px] tracking-[0.4em] text-brand-purple uppercase">Interactive Preview</h4>
+                <button onclick="closePreview()" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center transition-colors hover:bg-white/10"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <iframe id="previewFrame" class="flex-1 w-full border-none bg-white"></iframe>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * RUMUS & LOGIC TETAP SAMA SESUAI FILE ASLI (JANGAN DIGANTI)
+         * - cleanSetting, cleanColor, getIconHTML, fetchDB, applySettings -
+         */
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxxi-CuUu-jaXm5XN8pVl9xqQIHsBTHzPCu72clX210iTxaaFXc7yfh5R2uKXXTzFa3/exec';
+        let db = { assets: [], products: [], settings: {} };
+        let adminPass = '', clicks = 0, activeView = 'home', currentSilo = '', currentCategory = '';
+
+        function cleanSetting(val) {
+            if (!val) return "";
+            let cleaned = val.toString().trim();
+            if (cleaned.startsWith('"') && cleaned.endsWith('"')) { cleaned = cleaned.substring(1, cleaned.length - 1); }
+            return cleaned.trim();
+        }
+
+        function cleanColor(val) {
+            const cleaned = cleanSetting(val);
+            const hexMatch = cleaned.match(/#[0-9A-Fa-f]{6}/);
+            return hexMatch ? hexMatch[0] : cleaned;
+        }
+
+        function getIconHTML(val, className = "") {
+            const rawVal = cleanSetting(val);
+            if (!rawVal) return "";
+            if (rawVal.startsWith('http')) return `<img src="${rawVal}" class="${className} object-contain" />`;
+            return `<i class="${rawVal} ${className}"></i>`;
+        }
+
+        async function fetchDB() {
+            try {
+                const res = await fetch(API_URL);
+                const json = await res.json();
+                if(json.status === 'success') {
+                    db = json.data;
+                    applySettings();
+                    renderSidebar();
+                    renderByView();
+                }
+                document.getElementById('loading-overlay').style.display = 'none';
+            } catch (e) { 
+                console.error('Fetch Error:', e); 
+                document.getElementById('loading-overlay').innerHTML = `<div class="p-10 text-center"><p class="text-red-500 font-bold mb-2 uppercase tracking-widest">Sinkronisasi Gagal</p></div>`;
+            }
+        }
+
+        function applySettings() {
+            const s = db.settings;
+            if (!s) return;
+
+            const color1 = cleanColor(s.brand_color_1);
+            const rawColor2 = cleanSetting(s.brand_color_2) || '';
+            const root = document.documentElement;
+            const brandDisplay = document.getElementById('brandNameDisplay');
+
+            if (color1) { root.style.setProperty('--brand-primary', color1); }
+
+            brandDisplay.classList.remove('highlight-text');
+            brandDisplay.style.backgroundImage = 'none';
+            brandDisplay.style.webkitTextFillColor = '';
+            brandDisplay.style.color = '';
+
+            if (rawColor2 && rawColor2.includes('linear-gradient')) {
+                brandDisplay.classList.add('highlight-text');
+                brandDisplay.style.backgroundImage = rawColor2;
+                brandDisplay.innerHTML = cleanSetting(s.brand_name) || "iMersDocs";
+            } else {
+                brandDisplay.style.color = rawColor2 || (document.documentElement.classList.contains('light') ? '#0f172a' : 'white');
+                brandDisplay.innerHTML = cleanSetting(s.brand_name) || "iMersDocs";
+            }
+
+            document.title = cleanSetting(s.brand_name) || "Asset OS";
+            
+            const logoContainer = document.getElementById('brandLogoContainer');
+            if (logoContainer) {
+                if (rawColor2 && rawColor2.includes('linear-gradient')) {
+                    logoContainer.style.background = rawColor2; 
+                } else {
+                    logoContainer.style.backgroundColor = color1;
+                }
+                logoContainer.innerHTML = getIconHTML(s.brand_logo_icon, "w-6 h-6 text-white");
+                
+                const iconEl = logoContainer.querySelector('i');
+                if (iconEl && rawColor2 && !rawColor2.includes('<') && !rawColor2.includes('grad')) {
+                    iconEl.style.color = rawColor2;
+                } else if (iconEl) {
+                    iconEl.classList.add('text-white'); 
+                }
+            }
+
+            document.getElementById('footerDisplay').innerHTML = cleanSetting(s.footer_text) || "";
+
+            const overviewText = cleanSetting(s.menu_overview_text) || "Overview";
+            document.getElementById('overviewTextDisplay').innerText = overviewText;
+            document.getElementById('overviewIconContainer').innerHTML = getIconHTML(s.menu_overview_icon);
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        if (localStorage.theme === 'light') { document.documentElement.classList.add('light'); document.documentElement.classList.remove('dark'); }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+            applySettings();
+        });
+
+        function renderHome() {
+            activeView = 'home'; updateNav('navHome');
+            if(document.getElementById('globalSearch')) document.getElementById('globalSearch').value = ''; 
+            document.getElementById('headerTitle').innerText = cleanSetting(db.settings.menu_overview_text) || "Dashboard";
+            document.getElementById('breadcrumb').classList.add('hidden');
+
+            const html = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 animate-in items-stretch">
+                    ${db.products.map(p => {
+                        const count = db.assets.filter(a => a.product === p.name).length;
+                        const pColor = cleanColor(p.color) || 'var(--brand-primary)';
+                        return `
+                            <div onclick="openVault('${p.name}')" class="saas-card p-10 flex flex-col group relative overflow-hidden h-full shadow-lg">
+                                <div class="absolute -top-10 -right-10 w-24 h-24 blur-3xl opacity-20 rounded-full" style="background: ${pColor}"></div>
+                                <div class="w-16 h-16 rounded-3xl flex items-center justify-center text-white mb-10 shadow-2xl transition-all duration-500 group-hover:rotate-12 group-hover:scale-110" style="background: ${pColor}">
+                                    ${getIconHTML(p.icon, "text-2xl")}
+                                </div>
+                                <h4 class="text-xl font-black mb-3 font-title uppercase tracking-tighter highlight-text">${p.name}</h4>
+                                <p class="text-[11px] text-slate-500 dark:text-white/40 mb-12 font-body font-medium leading-relaxed flex-1">${p.desc || 'No description provided.'}</p>
+                                <div class="flex justify-between items-center mt-auto pt-8 border-t border-slate-100 dark:border-white/5">
+                                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-purple">${count} Aset Ready</span>
+                                    <div class="w-8 h-8 rounded-full glass flex items-center justify-center text-white/20 group-hover:text-white group-hover:bg-brand-purple/20 transition-all">
+                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            document.getElementById('viewArea').innerHTML = html;
+        }
+
+        function openVault(name) {
+            activeView = 'categories'; currentSilo = name; updateNav(`side-${name}`);
+            if(document.getElementById('globalSearch')) document.getElementById('globalSearch').value = ''; 
+            document.getElementById('headerTitle').innerText = name;
+            document.getElementById('breadcrumb').classList.remove('hidden');
+            const bP = document.getElementById('breadcrumbProduct');
+            bP.innerText = name; bP.onclick = () => openVault(name);
+            document.getElementById('breadcrumbCategoryContainer').classList.add('hidden');
+
+            const prodAssets = db.assets.filter(a => a.product === name);
+            const categories = [...new Set(prodAssets.map(a => a.category))];
+
+            if(categories.length === 0) {
+                document.getElementById('viewArea').innerHTML = `<div class="py-40 text-center"><p class="text-slate-300 dark:text-white/10 font-black uppercase tracking-[0.5em]">Vault Masih Kosong</p></div>`;
+                return;
+            }
+
+            const html = `
+                <div class="animate-in">
+                    <p class="text-[10px] font-black text-slate-400 dark:text-white/20 uppercase tracking-[0.3em] mb-10">Pilih Kategori Aset</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-stretch">
+                        ${categories.map(cat => {
+                            const count = prodAssets.filter(a => a.category === cat).length;
+                            return `
+                                <div onclick="openCategory('${name}', '${cat}')" class="saas-card p-10 flex items-center justify-between group h-full shadow-lg">
+                                    <div class="flex items-center gap-6">
+                                        <div class="w-14 h-14 glass rounded-2xl flex items-center justify-center text-slate-400 dark:text-white/20 group-hover:text-brand-purple group-hover:bg-brand-purple/10 transition-all duration-500">
+                                            <i class="fa-solid fa-folder-open text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-black font-title uppercase tracking-tighter text-base highlight-text leading-tight">${cat}</h5>
+                                            <p class="text-[10px] font-black text-slate-400 dark:text-white/20 uppercase tracking-widest mt-1">${count} Items</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-200 dark:text-white/10 group-hover:text-brand-purple group-hover:translate-x-1 transition-all ml-4"></i>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('viewArea').innerHTML = html;
+        }
+
+        function openCategory(prodName, catName) {
+            activeView = 'assets'; currentSilo = prodName; currentCategory = catName;
+            if(document.getElementById('globalSearch')) document.getElementById('globalSearch').value = ''; 
+            document.getElementById('breadcrumbCategoryContainer').classList.remove('hidden');
+            document.getElementById('breadcrumbCategory').innerText = catName;
+            const bP = document.getElementById('breadcrumbProduct');
+            bP.innerText = prodName; bP.onclick = () => openVault(prodName);
+
+            const assets = db.assets.filter(a => a.product === prodName && a.category === catName);
+            const subGroups = [...new Set(assets.map(a => a.sub_category || 'GENERAL'))];
+
+            let html = `
+                <div class="animate-in grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-10 items-start">
+                    ${subGroups.map(sub => `
+                        <div class="flex flex-col gap-6">
+                            <div class="sub-cat-badge w-fit">
+                                <div class="w-2 h-2 rounded-full bg-brand-purple shadow-[0_0_10px_#a855f7]"></div>
+                                ${sub}
+                            </div>
+                            <div class="flex flex-col gap-8">
+                                ${assets.filter(a => (a.sub_category || 'GENERAL') === sub).map(item => `
+                                    <div class="asset-card flex flex-col group border-slate-100 dark:border-white/5 h-full shadow-lg">
+                                        ${item.image_url ? `
+                                            <div class="mb-6 shrink-0">
+                                                <img src="${item.image_url}" class="w-full aspect-video object-cover rounded-2xl border border-slate-100 dark:border-white/5 shadow-2xl mb-4" onerror="this.style.display='none'">
+                                                <div class="grid grid-cols-2 gap-3">
+                                                    <button onclick="copyToClip('${item.image_url}')" class="bg-brand-blue/10 text-brand-blue hover:bg-brand-blue hover:text-white py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        <i class="fa-solid fa-link mr-2"></i> Salin URL
+                                                    </button>
+                                                    <button onclick="downloadImage('${item.image_url}','${item.title}')" class="bg-brand-purple/10 text-brand-purple hover:bg-brand-purple hover:text-white py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                                                        <i class="fa-solid fa-download mr-2"></i> Download
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                        <h6 class="font-black text-slate-900 dark:text-white text-base leading-tight mb-6 font-title uppercase tracking-tighter highlight-text min-h-[3rem] line-clamp-2">${item.title}</h6>
+                                        
+                                        <!-- FIX 1: ANTI-RENDER HTML (Menampilkan HTML sebagai Teks Mentah) -->
+                                        <div class="glass bg-white/2 border-white/5 rounded-2xl p-6 text-[11px] leading-relaxed text-slate-500 dark:text-white/40 mb-8 flex-1 whitespace-pre-line font-medium h-48 max-h-48 overflow-y-auto custom-scroll no-scrollbar">
+                                            ${item.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                                        </div>
+
+                                        <div class="flex gap-3 mt-auto shrink-0">
+                                            <button type="button" onclick="copyToClip(\`${item.content.replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)" class="flex-1 btn-black active:scale-95 font-black uppercase tracking-widest text-[10px]">Salin Teks</button>
+                                            
+                                            <!-- FIX 2: TOMBOL PREVIEW KONDISIONAL (Cuma muncul jika isinya HTML) -->
+                                            ${item.content.includes('<') ? `
+                                                <button type="button" onclick="previewHtml(\`${item.content.replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`)" class="w-12 h-12 glass border-white/10 rounded-xl flex items-center justify-center text-slate-400 dark:text-white/20 hover:text-brand-purple hover:bg-brand-purple/10 transition-all">
+                                                    <i class="fa-solid fa-eye text-xs"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('viewArea').innerHTML = html;
+        }
+
+        async function handleAssetSubmit(e) {
+            e.preventDefault(); 
+            const btn = document.getElementById('assetBtn'); 
+            btn.innerText = 'Publishing...'; btn.disabled = true;
+            const payload = { 
+                action: document.getElementById('assetId').value ? 'UPDATE_ASSET' : 'ADD_ASSET', 
+                password: adminPass, 
+                id: document.getElementById('assetId').value, 
+                product: document.getElementById('fAssetProduct').value, 
+                category: document.getElementById('fAssetCat').value, 
+                sub_category: document.getElementById('fAssetSub').value, 
+                title: document.getElementById('fAssetTitle').value, 
+                image_url: document.getElementById('fAssetImg').value, 
+                content: document.getElementById('fAssetContent').value 
+            };
+            try { 
+                const res = await fetch(API_URL, {method:'POST', body: JSON.stringify(payload)}); 
+                const data = await res.json();
+                if(data.status === 'success') {
+                    await fetchDB(); document.getElementById('assetForm').reset(); 
+                    document.getElementById('assetId').value = ''; showToast("Vault Updated!"); 
+                } else { alert('Error: ' + data.message); }
+                btn.innerText = 'Publish ke Vault'; btn.disabled = false; 
+            } catch(e) { alert('Sync Failed.'); btn.disabled = false; }
+        }
+
+        async function handleProductSubmit(e) {
+            e.preventDefault(); 
+            const btn = document.getElementById('prodBtn'); 
+            btn.innerText = 'Syncing...'; btn.disabled = true;
+            const payload = { 
+                action: document.getElementById('productId').value ? 'UPDATE_PRODUCT' : 'ADD_PRODUCT', 
+                password: adminPass, 
+                id: document.getElementById('productId').value, 
+                name: document.getElementById('fProdName').value, 
+                icon: document.getElementById('fProdIcon').value, 
+                color: document.getElementById('fProdColor').value, 
+                desc: document.getElementById('fProdDesc').value 
+            };
+            try { 
+                const res = await fetch(API_URL, {method:'POST', body: JSON.stringify(payload)}); 
+                const data = await res.json();
+                if(data.status === 'success') {
+                    await fetchDB(); document.getElementById('productForm').reset(); 
+                    document.getElementById('productId').value = ''; showToast("Silo Synchronized!"); 
+                }
+                btn.innerText = 'Update Database'; btn.disabled = false; 
+            } catch(e) { alert('Sync Failed.'); btn.disabled = false; }
+        }
+
+        async function deleteAsset(id) { if(confirm('Hapus selamanya?')) { await fetch(API_URL, {method:'POST', body: JSON.stringify({action:'DELETE_ASSET', password:adminPass, id})}); await fetchDB(); showToast("Permanently Deleted."); } }
+        async function deleteProduct(id) { if(confirm('Hapus silo ini?')) { await fetch(API_URL, {method:'POST', body: JSON.stringify({action:'DELETE_PRODUCT', password:adminPass, id})}); await fetchDB(); showToast("Silo Removed."); } }
+        
+        function editAsset(id) { 
+            const a = db.assets.find(item => item.id == id); if(!a) return;
+            activeView = 'asset'; renderAdminAssets(); 
+            document.getElementById('assetId').value = a.id; 
+            document.getElementById('fAssetProduct').value = a.product; 
+            document.getElementById('fAssetCat').value = a.category; 
+            document.getElementById('fAssetSub').value = a.sub_category || ''; 
+            document.getElementById('fAssetTitle').value = a.title; 
+            document.getElementById('fAssetImg').value = a.image_url || ''; 
+            document.getElementById('fAssetContent').value = a.content; 
+            document.getElementById('assetBtn').innerHTML = 'Update Snapshot';
+            document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function editProduct(id) { 
+            const p = db.products.find(item => item.id == id); if(!p) return;
+            activeView = 'product'; renderAdminProducts(); 
+            document.getElementById('productId').value = p.id; 
+            document.getElementById('fProdName').value = p.name; 
+            document.getElementById('fProdIcon').value = p.icon; 
+            document.getElementById('fProdColor').value = p.color; 
+            document.getElementById('fProdDesc').value = p.desc || ''; 
+            document.getElementById('prodBtn').innerHTML = 'Update Silo Info';
+            document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderSidebar() {
+            if (!db.products) return;
+            const sorted = [...db.products].sort((a,b) => a.name.localeCompare(b.name));
+            const grouped = sorted.reduce((acc, p) => { 
+                const letter = p.name[0].toUpperCase(); 
+                if(!acc[letter]) acc[letter] = []; acc[letter].push(p); return acc; 
+            }, {});
+            let html = '';
+            Object.keys(grouped).sort().forEach(letter => {
+                html += `<div class="alphabet-label">${letter}</div>`;
+                grouped[letter].forEach(p => {
+                    const pColor = cleanColor(p.color) || 'var(--brand-primary)';
+                    html += `
+                    <div onclick="openVault('${p.name}')" class="sidebar-link" id="side-${p.name}">
+                        <span class="mr-3 w-4 flex justify-center opacity-40 transition-opacity" style="color: ${pColor}">
+                            ${getIconHTML(p.icon)}
+                        </span> 
+                        <span class="text-xs truncate">${p.name}</span>
+                    </div>`;
+                });
+            });
+            document.getElementById('sidebarProductList').innerHTML = html;
+        }
+
+        function updateNav(activeId) {
+            document.querySelectorAll('.sidebar-link').forEach(n => n.classList.remove('active'));
+            const active = document.getElementById(activeId); if(active) active.classList.add('active');
+        }
+
+        function showToast(msg) {
+            document.getElementById('toastMsg').innerText = msg;
+            const t = document.getElementById('toast'); t.style.opacity = '1'; t.style.pointerEvents = 'auto';
+            setTimeout(() => { t.style.opacity = '0'; t.style.pointerEvents = 'none'; }, 3000);
+        }
+        function copyToClip(text) {
+            const el = document.createElement('textarea'); el.value = text; el.setAttribute('readonly', ''); el.style.position = 'absolute'; el.style.left = '-9999px';
+            document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); showToast("Disalin!");
+        }
+        async function downloadImage(url, filename = 'reseller-right-file') {
+            if (!url) return showToast("URL Hilang!");
+            try {
+                showToast("Downloading...");
+                const response = await fetch(url, { method: 'GET', mode: 'cors', cache: 'no-cache' });
+                const blob = await response.blob(); const blobUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a'); link.href = blobUrl;
+                const extension = url.split('.').pop().split(/\#|\?/)[0] || 'png';
+                link.download = `${filename}.${extension}`; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl); showToast("Download Selesai!");
+            } catch(err) { 
+                const link = document.createElement('a'); link.href = url;
+                link.target = "_blank"; link.click();
+            }
+        }
+        function previewHtml(code) { document.getElementById('previewFrame').srcdoc = code; document.getElementById('htmlPreview').classList.remove('hidden'); }
+        function closePreview() { document.getElementById('htmlPreview').classList.add('hidden'); }
+        
+        function renderByView() {
+            if(activeView === 'home') renderHome();
+            else if(activeView === 'categories') openVault(currentSilo);
+            else if(activeView === 'assets') openCategory(currentSilo, currentCategory);
+            else if(activeView === 'asset') renderAdminAssets();
+            else if(activeView === 'product') renderAdminProducts();
+        }
+
+        document.getElementById('logoBtn').onclick = () => {
+            const secretTarget = parseInt(cleanSetting(db.settings.admin_click_count)) || 5;
+            if(++clicks >= secretTarget) { document.getElementById('adminAuth').classList.remove('hidden'); clicks = 0; }
+        };
+        function closeAuth() { document.getElementById('adminAuth').classList.add('hidden'); }
+        async function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            const res = await fetch(API_URL, { method:'POST', body: JSON.stringify({action:'VERIFY', password:pass}) });
+            const json = await res.json();
+            if(json.status === 'success') { adminPass = pass; closeAuth(); document.getElementById('adminMenu').classList.remove('hidden'); renderByView(); } else { alert('Master Key Salah!'); }
+        }
+        function logoutAdmin() { adminPass = ''; document.getElementById('adminMenu').classList.add('hidden'); renderHome(); }
+        function checkAdmin(view) { if(!adminPass) document.getElementById('adminAuth').classList.remove('hidden'); else { activeView = view; renderByView(); } }
+
+        window.onload = function() { fetchDB(); };
+        function showHome() { activeView = 'home'; renderHome(); }
+    </script>
+</body>
+</html>
